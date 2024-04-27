@@ -8,7 +8,7 @@ console.log(file);
 const buffer = new Uint8Array(file);
 const chunks = APngStream.readChunks(buffer);
 
-APngStream.readData(chunks);
+console.log(chunks);
 
 const message = 'hello';
 const data = Uint8Array.from(message, (c) => c.charCodeAt(0));
