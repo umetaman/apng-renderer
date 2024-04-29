@@ -1,4 +1,4 @@
-# apng-stream
+# apng-renderer
 
 JavaScript Library for reading APNG image file.
 
