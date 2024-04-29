@@ -1,4 +1,4 @@
-import { SIGNATURE_PNG, IHDR, fcTL } from './apng';
+import { SIGNATURE_PNG, IHDR, fcTL, IDAT, fdAT } from './apng';
 import { crc32fast } from './crc32';
 
 export const SIZE_TYPE = 4;
@@ -89,4 +89,15 @@ export const writeIEND = (buffer: Uint8Array, offset: number): void => {
   // crc32
   const crc = crc32fast(buffer.slice(offset - SIZE_TYPE, offset));
   dataView.setUint32(offset, crc);
+};
+
+export const createBuffer = (content: IDAT | fdAT): Uint8Array => {
+  /**
+   * Signature: 8 bytes
+   * IHDR: 25 bytes
+   * IDAT: 12 + n bytes
+   * IEND: 12 bytes
+   */
+  const bufferSize = 8 + 25 + 12 + content.data.length + 12;
+  return new Uint8Array(bufferSize);
 };
