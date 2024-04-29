@@ -12,6 +12,7 @@ import {
 export interface Frame {
   control: fcTL;
   content: fdAT | IDAT;
+  image: HTMLImageElement | null;
 }
 
 export class Renderer {
@@ -72,15 +73,41 @@ export class Renderer {
 
   renderFrame(index: number, canvasElement: HTMLCanvasElement) {
     const frame = this.frames[index];
-    const png = this.buildPNG(frame.control, frame.content);
-    const blob = new Blob([png], { type: 'image/png' });
-    const url = URL.createObjectURL(blob);
-    const img = new Image();
-    img.src = url;
+    const image = frame.image;
+    if (!image) {
+      throw new Error('Image not loaded');
+    }
+
     const ctx = canvasElement.getContext('2d');
-    img.onload = () => {
-      ctx?.drawImage(img, frame.control.xOffset, frame.control.yOffset);
-    };
+    if (!ctx) {
+      throw new Error('Failed to get 2d context');
+    }
+
+    ctx.clearRect(0, 0, canvasElement.width, canvasElement.height);
+    ctx.drawImage(image, frame.control.xOffset, frame.control.yOffset);
+  }
+
+  async loadAsync() {
+    const promises: Promise<void>[] = [];
+    for (let i = 0; i < this.frames.length; i++) {
+      const frame = this.frames[i];
+      if (frame.content) {
+        const png = this.buildPNG(frame.control, frame.content);
+        const blob = new Blob([png], { type: 'image/png' });
+        const url = URL.createObjectURL(blob);
+        const image = new Image();
+        image.src = url;
+        const promise = new Promise<void>((resolve) => {
+          image.onload = () => {
+            frame.image = image;
+            resolve();
+          };
+        });
+        promises.push(promise);
+      }
+    }
+
+    await Promise.all(promises);
   }
 
   buildPNG(control: fcTL, content: IDAT | fdAT): Uint8Array {
