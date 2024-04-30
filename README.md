@@ -31,3 +31,8 @@ const render = () => {
 }
 render();
 ```
+
+## TO DO
+
+- [] Frame options
+- [] Render fixed fps.
