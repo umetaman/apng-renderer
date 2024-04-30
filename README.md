@@ -34,5 +34,5 @@ render();
 
 ## TO DO
 
-- [] Frame options
-- [] Render fixed fps.
+- [ ] Frame options
+- [ ] Render fixed fps.
