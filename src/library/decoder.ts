@@ -1,13 +1,4 @@
-import {
-  isPNG,
-  SIGNATURE_PNG,
-  IChunk,
-  IDAT,
-  IHDR,
-  fcTL,
-  fdAT,
-  acTL,
-} from './apng';
+import { isPNG, SIGNATURE_PNG, IChunk, IHDR, fcTL, fdAT, acTL } from './apng';
 
 export const readChunks = (buffer: Uint8Array): IChunk<unknown>[] => {
   if (isPNG(buffer) == false) {
