@@ -2,6 +2,8 @@
 
 JavaScript Library for rendering apng image files.
 
+[Demo](https://umetaman.github.io/apng-renderer/)
+
 !["apng-renderer"](./apng-renderer.gif)
 
 ## Getting Started
