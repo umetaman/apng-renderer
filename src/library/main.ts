@@ -1,4 +1,13 @@
-import { IChunk, IHDR, acTL, fcTL, fdAT, IDAT } from './apng';
+import {
+  IChunk,
+  IHDR,
+  acTL,
+  fcTL,
+  fdAT,
+  IDAT,
+  DisposeOption,
+  BlendOption,
+} from './apng';
 import { readChunks } from './decoder';
 import {
   createBuffer,
@@ -79,6 +88,68 @@ export class Renderer {
     return canvas;
   }
 
+  dispose(index: number, canvasElement: HTMLCanvasElement) {
+    const ctx = canvasElement.getContext('2d');
+    if (!ctx) {
+      throw new Error('Failed to get 2d context');
+    }
+
+    if (index < 1) {
+      return;
+    }
+
+    const prevIndex = Math.max(0, index - 1);
+    const currentFrame = this.frames[index];
+    const prevFrame = this.frames[prevIndex];
+
+    switch (currentFrame.control.disposeOp) {
+      case DisposeOption.None:
+        break;
+      case DisposeOption.Background:
+        ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+        break;
+      case DisposeOption.Previous:
+        if (prevFrame.image) {
+          ctx.drawImage(
+            prevFrame.image,
+            prevFrame.control.xOffset,
+            prevFrame.control.yOffset,
+          );
+        }
+        break;
+    }
+  }
+
+  blend(index: number, canvasElement: HTMLCanvasElement) {
+    const ctx = canvasElement.getContext('2d');
+    if (!ctx) {
+      throw new Error('Failed to get 2d context');
+    }
+
+    if (index < 1) {
+      return;
+    }
+
+    const prevIndex = Math.max(0, index - 1);
+    const currentFrame = this.frames[index];
+    const prevFrame = this.frames[prevIndex];
+
+    switch (currentFrame.control.blendOp) {
+      case BlendOption.Source:
+        ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+        break;
+      case BlendOption.Over:
+        if (prevFrame.image) {
+          ctx.drawImage(
+            prevFrame.image,
+            prevFrame.control.xOffset,
+            prevFrame.control.yOffset,
+          );
+        }
+        break;
+    }
+  }
+
   renderFrame(index: number, canvasElement: HTMLCanvasElement) {
     const frame = this.frames[index];
     const image = frame.image;
@@ -91,7 +162,6 @@ export class Renderer {
       throw new Error('Failed to get 2d context');
     }
 
-    ctx.clearRect(0, 0, canvasElement.width, canvasElement.height);
     ctx.drawImage(image, frame.control.xOffset, frame.control.yOffset);
   }
 
@@ -136,8 +206,8 @@ export class Renderer {
 }
 
 export class Player {
-  private renderer: Renderer | null = null;
-  private canvas: HTMLCanvasElement | null = null;
+  private renderer: Renderer;
+  private canvas: HTMLCanvasElement;
   private index: number = 0;
   private isPlaying: boolean = false;
 
@@ -159,8 +229,10 @@ export class Player {
 
       const currentTime = performance.now();
       if (currentTime - prevTime >= frameInterval) {
-        this.renderer?.renderFrame(this.index, this.canvas!);
-        this.index = (this.index + 1) % this.renderer!.frameCount;
+        this.renderer.dispose(this.index, this.canvas);
+        this.renderer.blend(this.index, this.canvas);
+        this.renderer.renderFrame(this.index, this.canvas);
+        this.index = (this.index + 1) % this.renderer.frameCount;
         prevTime = currentTime;
       }
 

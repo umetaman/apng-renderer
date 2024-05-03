@@ -11,6 +11,8 @@
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+
+  font-size: max(13px, 1vw);
 }
 
 @media (prefers-color-scheme: light) {
@@ -51,6 +53,8 @@ div#app {
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  width: 100%;
+  padding: 2em;
 }
 
 div#app > canvas {
@@ -59,4 +63,5 @@ div#app > canvas {
 
 div#app > input {
   width: 100%;
+  max-width: 540px
 }

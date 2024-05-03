@@ -29,6 +29,17 @@ export interface acTL {
   numPlays: number;
 }
 
+export enum DisposeOption {
+  None = 0,
+  Background = 1,
+  Previous = 2,
+}
+
+export enum BlendOption {
+  Source = 0,
+  Over = 1,
+}
+
 export interface fcTL {
   sequenceNumber: number;
   width: number;
