@@ -134,3 +134,43 @@ export class Renderer {
     return buffer;
   }
 }
+
+export class Player {
+  private renderer: Renderer | null = null;
+  private canvas: HTMLCanvasElement | null = null;
+  private index: number = 0;
+  private isPlaying: boolean = false;
+
+  constructor(renderer: Renderer, canvas: HTMLCanvasElement) {
+    this.renderer = renderer;
+    this.canvas = canvas;
+  }
+
+  play(fps: number) {
+    this.isPlaying = true;
+
+    let prevTime = performance.now();
+    const frameInterval = 1000 / fps;
+
+    const renderLoop = () => {
+      if (!this.isPlaying) {
+        return;
+      }
+
+      const currentTime = performance.now();
+      if (currentTime - prevTime >= frameInterval) {
+        this.renderer?.renderFrame(this.index, this.canvas!);
+        this.index = (this.index + 1) % this.renderer!.frameCount;
+        prevTime = currentTime;
+      }
+
+      requestAnimationFrame(renderLoop);
+    };
+
+    requestAnimationFrame(renderLoop);
+  }
+
+  stop() {
+    this.isPlaying = false;
+  }
+}
