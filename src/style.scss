@@ -1,0 +1,114 @@
+:root {
+  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+
+  color-scheme: light dark;
+  color: rgba(255, 255, 255, 0.87);
+  background-color: #242424;
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+
+  font-size: max(13px, 1vw);
+}
+
+@media (prefers-color-scheme: light) {
+  :root {
+    color: #213547;
+    background-color: #ffffff;
+  }
+  a:hover {
+    color: #747bff;
+  }
+  button {
+    background-color: #f9f9f9;
+  }
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  width: 100%;
+  height: 100vh;
+
+  font-size: 1.25vmin;
+}
+
+header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 2em;
+}
+
+main {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}
+
+div.sample {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+
+  img#sample-apng {
+    width: 40em;
+    height: auto;
+  }
+}
+
+div.renderer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  canvas#renderer-fps {
+    width: 40em;
+    height: auto;
+  }
+
+  button {
+    padding: 0.5em 0.75em;
+    border-radius: 100vw;
+    border: none;
+    background-color: #005cc8;
+    color: #ffffff;
+    font-size: 1em;
+
+    &:not(:last-child) {
+      margin-right: 0.5em;
+    }
+  }
+
+  div.renderer-control-button {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    margin-bottom: 0.75em;
+  }
+
+  div.renderer-control-fps {
+    span {
+      margin-right: 1em;
+    }
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+  }
+}

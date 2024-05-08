@@ -7,8 +7,30 @@
     <title>APNG Renderer | JavaScript Library for rendering apng file.</title>
   </head>
   <body>
-    <h1>APNG Renderer</h1>
-    <div id="app"></div>
+    <header>
+      <h1>APNG Renderer</h1>
+      <p>JavaScript Library for rendering apng file.</p>
+    </header>
+    <main>
+      <div class="sample">
+        <h2>APNG using &lt;img /&gt;</h2>
+        <img width="480" height="400" id="sample-apng" />
+      </div>
+      <div class="renderer">
+        <h2>APNG Renderer using &lt;canvas /&gt;</h2>
+        <canvas id="renderer-fps" width="480" height="400"></canvas>
+        <div class="renderer-control-button">
+          <button id="renderer-play">Play</button>
+          <button id="renderer-pause">Pause</button>
+          <button id="renderer-stop">Stop</button>
+          <button id="renderer-restart">Restart</button>
+        </div>
+        <div class="renderer-control-fps">
+          <span id="renderer-fps-text">FPS: 0</span>
+          <input id="renderer-slider-fps" type="range" />
+        </div>
+      </div>
+    </main>
     <script type="module" src="/src/main.ts"></script>
   </body>
 </html>

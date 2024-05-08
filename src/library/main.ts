@@ -127,6 +127,7 @@ export class Renderer {
     }
 
     if (index < 1) {
+      ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
       return;
     }
 
@@ -217,6 +218,10 @@ export class Player {
   }
 
   play(fps: number) {
+    if (this.isPlaying) {
+      return;
+    }
+
     this.isPlaying = true;
 
     let prevTime = performance.now();
@@ -243,6 +248,11 @@ export class Player {
   }
 
   stop() {
+    this.isPlaying = false;
+    this.index = 0;
+  }
+
+  pause() {
     this.isPlaying = false;
   }
 }
